@@ -14,24 +14,17 @@ import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.eventbus.impl.clustered.ClusteredEventBus;
 import io.vertx.core.eventbus.impl.clustered.ClusteredMessage;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.spi.cluster.ClusterManager;
+import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
+import vertx.start.RunApiGateway;
 
 import java.net.InetAddress;
 
 public class ReceiverVerticle extends AbstractVerticle {
 
   @Override
-  public void start() throws Exception {
-    VertxOptions options = new VertxOptions();
-
-    // 本机局域网Ip
-    String hostAddress = InetAddress.getLocalHost().getHostAddress();
-    options.getEventBusOptions().setHost(hostAddress).setClustered(true);
-
-    Vertx.clusteredVertx(options, res -> {
-      if (res.succeeded()) {
-        Vertx vertx = res.result();
+  public void start(){
         EventBus eventBus = vertx.eventBus();
-        System.out.println("We now have a clustered event bus: " + eventBus);
         MessageConsumer<JsonObject> consumer = eventBus.consumer("receiver");
         consumer.handler(message -> {
           JsonObject jsonMessage = message.body();
@@ -39,11 +32,6 @@ public class ReceiverVerticle extends AbstractVerticle {
           JsonObject jsonReply = new JsonObject().put("reply", "666 !");
           message.reply(jsonReply);
         });
-      } else {
-
-        System.out.println("Failed: " + res.cause());
-      }});
-
 
    /* EventBus eventBus = vertx.eventBus();
 

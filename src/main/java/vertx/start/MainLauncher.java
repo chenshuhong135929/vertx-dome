@@ -21,26 +21,14 @@ public class MainLauncher extends Launcher {
 
   public static void main(String[] args) {
     //修改为你所要启动的类就可以了
-     new MainLauncher().dispatch(new String[] { "run", ReceiverVerticle.class.getName() });
-  // new MainLauncher().dispatch(new String[] { "run", SenderVerticle.class.getName() });
-    ClusterManager mgr = new HazelcastClusterManager();
+    //   new MainLauncher().dispatch(new String[] { "run", ReceiverVerticle.class.getName() });
+    //   new MainLauncher().dispatch(new String[] { "run", SenderVerticle.class.getName() });
 
-    VertxOptions options = new VertxOptions().setClusterManager(mgr);
-
-    String hostAddress = null;
     try {
-      hostAddress = InetAddress.getLocalHost().getHostAddress();
+      RunApiGateway.start();
     } catch (UnknownHostException e) {
       e.printStackTrace();
     }
-    options.getEventBusOptions().setHost(hostAddress).setClustered(true);
-    Vertx.clusteredVertx(options, res -> {
-      if (res.succeeded()) {
-        Vertx vertx = res.result();
-      } else {
-        // failed!
-      }
-    });
   }
 
 }

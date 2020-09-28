@@ -10,6 +10,9 @@ import io.vertx.core.VertxOptions;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.EventBusOptions;
 import io.vertx.core.json.JsonObject;
+import io.vertx.core.spi.cluster.ClusterManager;
+import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
+import vertx.start.RunApiGateway;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -17,23 +20,12 @@ import java.net.UnknownHostException;
 public class SenderVerticle extends AbstractVerticle {
 
   @Override
-  public void start() throws Exception  {
-    VertxOptions options = new VertxOptions();
-    Vertx.clusteredVertx(options, res -> {
-      if (res.succeeded()) {
-        Vertx vertx = res.result();
-        String hostAddress = null;
-        try {
-          hostAddress = InetAddress.getLocalHost().getHostAddress();
-        } catch (UnknownHostException e) {
-          e.printStackTrace();
-        }
-        options.getEventBusOptions().setHost(hostAddress).setClustered(true);
+  public void start() throws UnknownHostException {
         EventBus eventBus = vertx.eventBus();
-        System.out.println("We now have a clustered event bus: " + eventBus);
-        JsonObject msg = new JsonObject().put("message_from_sender_verticle", "Hello, Consumer !");
+        String hostAddress = InetAddress.getLocalHost().getHostAddress();
+        JsonObject msg = new JsonObject().put("message_from_sender_verticle", "Hello, Consumer !"+hostAddress);
         vertx.setPeriodic(3000, index -> {
-          System.out.println("触发发送信息。。。。。");
+          System.out.println(hostAddress+"--->>>  触发发送信息。。。。。");
           eventBus.request("receiver", msg, r -> {
             if (r.succeeded()) {
               JsonObject reply = (JsonObject) r.result().body();
@@ -41,10 +33,6 @@ public class SenderVerticle extends AbstractVerticle {
             }
           });
         });
-      } else {
-
-        System.out.println("Failed: " + res.cause());
-      }});
 
 
  /*   EventBus eventBus = vertx.eventBus();
