@@ -18,13 +18,13 @@ import java.nio.charset.Charset;
  * @Auther ChenShuHong
  * @Date 2020-08-19 15:10
  */
-public class MainClienDeom extends AbstractVerticle {
+public class MainClientDome extends AbstractVerticle {
   /**
    * http://localhost:8888/mqttSubscribe?topic=ddd&qos=2
    * http://localhost:8888/mqttPublish?topic=ddd&qos=2&data=HOLLEO
    */
 
-  final InternalLogger logger= Log4JLoggerFactory.getInstance(MainClienDeom.class);
+  final InternalLogger logger= Log4JLoggerFactory.getInstance(MainClientDome.class);
   private String url ="192.168.2.17";
   private Integer port =1883;
   Router router;

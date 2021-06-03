@@ -14,7 +14,7 @@ import io.vertx.mqtt.MqttClientOptions;
  */
 public class MqttClienVerticle  {
 
-  private String url ="192.168.2.17";
+  private String url ="localhost";
   private Integer port =1883;
 
   public static void main(String[] args) {

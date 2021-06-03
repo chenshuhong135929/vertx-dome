@@ -23,12 +23,14 @@ public class MainLauncher extends Launcher {
     //修改为你所要启动的类就可以了
     //   new MainLauncher().dispatch(new String[] { "run", ReceiverVerticle.class.getName() });
     //   new MainLauncher().dispatch(new String[] { "run", SenderVerticle.class.getName() });
+   // new MainLauncher().dispatch(new String[] { "run", MqttVerticle.class.getName() });
+    new MainLauncher().dispatch(new String[] { "run", MqttVerticle.class.getName() });
 
-    try {
+  /*  try {
       RunApiGateway.start();
     } catch (UnknownHostException e) {
       e.printStackTrace();
-    }
+    }*/
   }
 
 }
